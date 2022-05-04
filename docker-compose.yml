@@ -1,0 +1,25 @@
+version: '3.8'
+services:
+  cardano-node:
+    build: ./cardano-node
+    volumes:
+      - cardano-node-data:/data
+      - node-ipc:/ipc
+      - ./cardano-node/keys:/usr/keys
+      - ./cardano-node/scripts:/scripts
+
+  app:
+    build: ./app
+    volumes:
+      - ./app:/usr/src/app
+      - node-ipc:/ipc
+    ports:
+      - '3000:3000'
+    depends_on:
+      - cardano-node
+    command: npm run dev
+
+
+volumes:
+  cardano-node-data:
+  node-ipc: # wallet-db:
