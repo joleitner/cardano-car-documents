@@ -1,0 +1,19 @@
+$theme-colors: (
+  'primary': #145bea,
+  'secondary': #833bec,
+  'success': #1ce1ac,
+  'info': #ff7d50,
+  'warning': #ffbe0b,
+  'danger': #ff007f,
+  'light': #c0ccda,
+  'dark': #001738,
+  'lighter-blue': #e9eeff,
+  'light-blue': #c7d2fe,
+  'text-lighter-blue': #3147ac,
+  'text-light-blue': #4f46e5,
+  'indigo': #6366f1,
+  'gray': #434343,
+  'light-gray': #e7e9eb,
+);
+
+@import '~bootstrap/scss/bootstrap.scss';
