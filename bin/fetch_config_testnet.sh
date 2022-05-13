@@ -19,6 +19,6 @@ wget https://hydra.iohk.io/job/Cardano/cardano-node/cardano-deployment/latest-fi
 
 cd $PROJECT_DIR
 
-cp -rf $CONFIG_DIR/* cardano-node/config
-cp $CONFIG_DIR/testnet-shelley-genesis.json ./app/config/testnet-shelley-genesis.json
+mkdir -p cardano-node/config && cp -rf $CONFIG_DIR/* cardano-node/config
+mkdir -p app/config && cp $CONFIG_DIR/testnet-shelley-genesis.json ./app/config/testnet-shelley-genesis.json
 
