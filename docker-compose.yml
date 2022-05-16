@@ -17,9 +17,31 @@ services:
       - '3000:3000'
     depends_on:
       - cardano-node
+      - db
     command: npm run dev
+
+  db:
+    image: postgres:14
+    restart: always
+    volumes:
+      - 'postgres_data:/var/lib/postgresql/data/'
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+
+  prisma-studio:
+    image: timothyjmiller/prisma-studio:latest
+    restart: unless-stopped
+    environment:
+      - POSTGRES_URL=postgresql://${DB_USER}:${DB_PASSWORD}@db:5432/${DB_NAME}?schema=public
+    ports:
+      - 5555:5555
+    depends_on:
+      - db
 
 
 volumes:
   cardano-node-data:
   node-ipc: # wallet-db:
+  postgres_data:
