@@ -28,6 +28,17 @@ export default function Navigation() {
               <Nav.Link>About</Nav.Link>
             </Link>
           </Nav>
+          <Nav className={'align-items-lg-center'}>
+  
+              <Link href="/login" passHref>
+                <Nav.Link>Login</Nav.Link>
+                {/* <Button variant="outline-light">Login</Button> */}
+              </Link>
+            <Link href="/signup" passHref>
+                <Nav.Link>Signup</Nav.Link>
+              {/* <Button variant="outline-light">Signup</Button> */}
+            </Link>
+          </Nav>
         </Navbar.Collapse>
       </Container>
     </Navbar>

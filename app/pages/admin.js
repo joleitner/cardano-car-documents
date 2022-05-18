@@ -2,7 +2,6 @@ import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import Container from 'react-bootstrap/Container'
 import { Formik } from 'formik'
-import { useRouter } from 'next/router'
 
 const validate = (values) => {
   const errors = {}
@@ -43,7 +42,7 @@ export default function CreateWallet() {
         }) => (
           <Form noValidate onSubmit={handleSubmit}>
             {/* account */}
-            <Form.Group className={'mb-3'} controlId="name">
+            <Form.Group className={'mb-3'} controlId="account">
               <Form.Label>Wallet name</Form.Label>
               <Form.Control
                 type="text"
@@ -51,7 +50,7 @@ export default function CreateWallet() {
                 value={values.account}
                 onChange={handleChange}
                 onBlur={handleBlur}
-                isInvalid={touched.title && errors.title}
+                isInvalid={touched.account && errors.account}
               />
               <Form.Control.Feedback type="invalid">
                 {errors.account}
