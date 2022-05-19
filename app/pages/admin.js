@@ -1,7 +1,9 @@
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import Container from 'react-bootstrap/Container'
+import Alert from 'react-bootstrap/Alert'
 import { Formik } from 'formik'
+import { useUser } from '../hooks/useUser'
 
 const validate = (values) => {
   const errors = {}
@@ -16,6 +18,18 @@ const validate = (values) => {
 }
 
 export default function CreateWallet() {
+  const [user] = useUser()
+
+  if (!user?.admin) {
+    return (
+      <Container className={'w-75 mb-5'}>
+        <Alert variant="danger" className="text-center">
+          Unauthorized
+        </Alert>
+      </Container>
+    )
+  }
+
   return (
     <Container className={'w-75 mb-5'}>
       <h2>Create a new wallet</h2>

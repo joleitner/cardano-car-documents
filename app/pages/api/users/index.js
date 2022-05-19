@@ -1,7 +1,7 @@
 import nextConnect from 'next-connect'
-import auth from '../../middleware/auth'
-import { createUser, findUserByEmail } from '../../lib/user'
-import prisma from '../../lib/prisma'
+import auth from '../../../middleware/auth'
+import { createUser, findUserByEmail } from '../../../lib/user'
+import prisma from '../../../lib/prisma'
 
 const handler = nextConnect()
 

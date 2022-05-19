@@ -17,4 +17,14 @@ model User {
   firstname String?
   lastname  String?
   createdAt DateTime @default(now())
+  admin     Boolean  @default(false)
+  Wallet    Wallet[]
+}
+
+model Wallet {
+  id        Int      @id @default(autoincrement())
+  account   String   @unique
+  User      User     @relation(fields: [userId], references: [id], onDelete: SetNull)
+  userId    Int
+  createdAt DateTime @default(now())
 }
