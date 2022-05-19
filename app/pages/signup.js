@@ -1,13 +1,16 @@
 import { useRouter } from 'next/router'
-import { useState } from 'react'
+import Link from 'next/link'
+import { useState, useEffect } from 'react'
+import { useUser } from '../hooks/useUser'
 import Container from 'react-bootstrap/Container'
 import Alert from 'react-bootstrap/Alert'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
-import { Formik, ErrorMessage } from 'formik'
+import { Formik } from 'formik'
 
 const Signup = () => {
   const router = useRouter()
+  const [user] = useUser()
   const [errorMsg, setErrorMsg] = useState('')
   const [successMsg, setSuccessMsg] = useState('')
 
@@ -53,6 +56,10 @@ const Signup = () => {
       }
     })
   }
+
+  useEffect(() => {
+    if (user) router.push('/') // redirect to home if user is authenticated
+  }, [user])
 
   return (
     <Container className={'w-50 mb-5'}>
@@ -145,6 +152,11 @@ const Signup = () => {
                 {errors.rpassword}
               </Form.Control.Feedback>
             </Form.Group>
+            <div className="mb-3 link-primary">
+              <Link href="/login" passHref>
+                You already have an account?
+              </Link>
+            </div>
             <Button variant="primary" type="submit">
               Signup
             </Button>

@@ -1,4 +1,5 @@
 import { useRouter } from 'next/router'
+import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import Container from 'react-bootstrap/Container'
 import Alert from 'react-bootstrap/Alert'
@@ -92,6 +93,13 @@ const Login = () => {
                 {errors.password}
               </Form.Control.Feedback>
             </Form.Group>
+
+            <div className="mb-3 link-primary">
+              <Link href="/signup" passHref>
+                You don't have an account yet?
+              </Link>
+            </div>
+
             <Button variant="primary" type="submit">
               Login
             </Button>

@@ -4,8 +4,17 @@ import Navbar from 'react-bootstrap/Navbar'
 import Container from 'react-bootstrap/Container'
 import Nav from 'react-bootstrap/Nav'
 import Button from 'react-bootstrap/Button'
+import { useUser } from '../hooks/useUser'
+import { useEffect } from 'react'
 
 export default function Navigation() {
+  const [user, {mutate}] = useUser()
+
+  const logout = () => {
+    fetch('api/auth/logout').then((res) => {
+        mutate(undefined)
+    })
+  }
 
   return (
     <Navbar bg="dark" variant="dark" expand="lg" fixed="top" collapseOnSelect>
@@ -29,15 +38,14 @@ export default function Navigation() {
             </Link>
           </Nav>
           <Nav className={'align-items-lg-center'}>
-  
-              <Link href="/login" passHref>
-                <Nav.Link>Login</Nav.Link>
-                {/* <Button variant="outline-light">Login</Button> */}
-              </Link>
-            <Link href="/signup" passHref>
-                <Nav.Link>Signup</Nav.Link>
-              {/* <Button variant="outline-light">Signup</Button> */}
-            </Link>
+            {!user && 
+              (<Link href="/login" passHref>
+                <Button variant="outline-light">Login</Button>
+              </Link>)
+            }
+            {user && 
+              (<Button variant="outline-light" onClick={logout}>Logout</Button>)
+            }
           </Nav>
         </Navbar.Collapse>
       </Container>

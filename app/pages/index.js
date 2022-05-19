@@ -1,9 +1,9 @@
 import { useUser } from '../hooks/useUser'
 
-export default function Home() {
-  const [user, { mutate }] = useUser()
+export default function Home(req, res) {
+  const [user] = useUser()
 
-  let name = 'Peter'
+  let name = ''
   if (user) {
     name = user.firstname
   }
