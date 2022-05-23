@@ -1,0 +1,1 @@
+docker-compose exec app chown node /ipc/node.socket

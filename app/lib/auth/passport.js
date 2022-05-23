@@ -1,12 +1,12 @@
 import passport from 'passport'
 import LocalStrategy from 'passport-local'
-import { findUserByEmail, findUserById, validatePassword } from '../user'
+import { getUserByEmail, getUserById, validatePassword } from '../user'
 
 passport.serializeUser((user, done) => done(null, user.id))
-passport.deserializeUser((id, done) => done(null, findUserById(id)))
+passport.deserializeUser((id, done) => done(null, getUserById(id)))
 
 const authenticateUser = (email, password, done) => {
-  findUserByEmail(email)
+  getUserByEmail(email)
     .then(async (user) => {
       if (user && (await validatePassword(user, password))) {
         done(null, user)

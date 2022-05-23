@@ -1,6 +1,6 @@
 import nextConnect from 'next-connect'
 import auth from '../../../middleware/auth'
-import { createUser, findUserByEmail } from '../../../lib/user'
+import { createUser, getUserByEmail } from '../../../lib/user'
 import prisma from '../../../lib/prisma'
 
 const handler = nextConnect()
@@ -9,7 +9,7 @@ handler
   .use(auth)
   .get(async (req, res) => {
     const result = await prisma.user.findMany()
-    res.json({ result })
+    res.json(result)
   })
 
   .post(async (req, res) => {
@@ -18,7 +18,7 @@ handler
       return res.status(400).send('Missing fields')
     }
     // Here you check if the username has already been used
-    const emailExisted = !!(await findUserByEmail(email))
+    const emailExisted = !!(await getUserByEmail(email))
     if (emailExisted) {
       return res
         .status(409)

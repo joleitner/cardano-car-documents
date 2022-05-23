@@ -1,24 +1,24 @@
-const cardano = require('./cardano')
-const fs = require('fs')
+import cardano from './cardano'
+import fs from 'fs'
 
 class WalletManager {
   constructor() {
     this.walletDir = './priv/wallet/'
   }
 
-  createWallet(account) {
-    let paymentKeys = cardano.addressKeyGen(account)
-    let stakeKeys = cardano.stakeAddressKeyGen(account)
-    let stakeAddr = cardano.stakeAddressBuild(account)
-    let paymentAddr = cardano.addressBuild(account, {
+  createWallet(name) {
+    let paymentKeys = cardano.addressKeyGen(name)
+    let stakeKeys = cardano.stakeAddressKeyGen(name)
+    let stakeAddr = cardano.stakeAddressBuild(name)
+    let paymentAddr = cardano.addressBuild(name, {
       paymentVkey: paymentKeys.vkey,
       stakeVkey: stakeKeys.vkey,
     })
-    return cardano.wallet(account)
+    return cardano.wallet(name)
   }
 
-  deleteWallet(account) {
-    let accountDir = this.walletDir + account
+  deleteWallet(name) {
+    let accountDir = this.walletDir + name
     try {
       fs.rmSync(accountDir, { recursive: true })
       return true
@@ -27,16 +27,20 @@ class WalletManager {
     }
   }
 
-  listWallets() {
+  getWallets() {
     let wallets = []
     fs.readdirSync(this.walletDir).forEach((file) => {
-      wallets.push(file)
+      wallets.push(this.getWallet(file))
     })
     return wallets
   }
 
-  showBalance(account) {
-    let wallet = cardano.wallet(account)
+  getWallet(name) {
+    return cardano.wallet(name)
+  }
+
+  showBalance(name) {
+    let wallet = cardano.wallet(name)
     return wallet.balance()
   }
 }

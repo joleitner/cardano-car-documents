@@ -20,21 +20,51 @@ export async function createUser({ email, firstname, lastname, password }) {
     .catch((err) => console.error(err.message))
 }
 
-export async function findUserByEmail(email) {
+export async function getUserByEmail(email) {
   const user = await prisma.user.findUnique({
     where: {
       email: email,
     },
+    include: {
+      Wallet: {
+        select: {
+          name: true,
+        },
+      },
+    },
   })
+
+  // let wallets = []
+  // for (const key in user.Wallet) {
+  //   wallets.push(user.Wallet[key].name)
+  // }
+  user.wallets = user.Wallet
+  delete user.Wallet
+
   return user
 }
 
-export async function findUserById(id) {
+export async function getUserById(id) {
   const user = await prisma.user.findUnique({
     where: {
-      id: id,
+      id: parseInt(id),
+    },
+    include: {
+      Wallet: {
+        select: {
+          name: true,
+        },
+      },
     },
   })
+
+  // let wallets = []
+  // for (const key in user.Wallet) {
+  //   wallets.push(user.Wallet[key].name)
+  // }
+  user.wallets = user.Wallet
+  delete user.Wallet
+
   return user
 }
 
