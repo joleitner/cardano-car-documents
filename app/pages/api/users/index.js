@@ -1,15 +1,22 @@
 import nextConnect from 'next-connect'
 import auth from '../../../middleware/auth'
-import { createUser, getUserByEmail } from '../../../lib/user'
-import prisma from '../../../lib/prisma'
+import {
+  createUser,
+  getUserByEmail,
+  getAllUsers,
+} from '../../../src/models/users'
 
 const handler = nextConnect()
 
 handler
   .use(auth)
   .get(async (req, res) => {
-    const result = await prisma.user.findMany()
-    res.json(result)
+    if (user?.admin) {
+      const result = await getAllUsers()
+      res.json(result)
+    } else {
+      res.json({ status: 401, message: 'Unauthorized' })
+    }
   })
 
   .post(async (req, res) => {
@@ -20,9 +27,10 @@ handler
     // Here you check if the username has already been used
     const emailExisted = !!(await getUserByEmail(email))
     if (emailExisted) {
-      return res
-        .status(409)
-        .send('An account with this email has already been created')
+      return res.json({
+        status: 409,
+        message: 'An account with this email has already been created',
+      })
     }
     // Security-wise, you must hash the password before saving it
     // const hashedPass = await argon2.hash(password);

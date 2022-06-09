@@ -1,6 +1,6 @@
 import passport from 'passport'
 import LocalStrategy from 'passport-local'
-import { getUserByEmail, getUserById, validatePassword } from '../user'
+import { getUserByEmail, getUserById, validatePassword } from '../models/users'
 
 passport.serializeUser((user, done) => done(null, user.id))
 passport.deserializeUser((id, done) => done(null, getUserById(id)))

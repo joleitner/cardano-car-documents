@@ -11,20 +11,42 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
-  password  String
-  firstname String?
-  lastname  String?
-  createdAt DateTime @default(now())
-  admin     Boolean  @default(false)
-  Wallet    Wallet[]
+  id             Int           @id @default(autoincrement())
+  email          String        @unique
+  password       String
+  firstname      String?
+  lastname       String?
+  admin          Boolean       @default(false)
+  walletId       Int?
+  Wallet         Wallet?       @relation(fields: [walletId], references: [id], onDelete: SetNull)
+  organizationId Int?
+  Organization   Organization? @relation(fields: [organizationId], references: [id], onDelete: SetNull)
+  createdAt      DateTime      @default(now())
 }
 
 model Wallet {
-  id        Int      @id @default(autoincrement())
-  name      String   @unique
-  User      User     @relation(fields: [userId], references: [id], onDelete: SetNull)
-  userId    Int
-  createdAt DateTime @default(now())
+  id           Int            @id @default(autoincrement())
+  address      String?        @unique
+  createdAt    DateTime       @default(now())
+  user         User[]
+  organization Organization[]
+}
+
+model Organization {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique
+  slug        String   @unique
+  type        String
+  description String?
+  walletId    Int?
+  Wallet      Wallet?  @relation(fields: [walletId], references: [id], onDelete: SetNull)
+  users       User[]
+  policies    Policy[]
+
+}
+
+model Policy {
+  id            Int            @id @default(autoincrement())
+  organizations Organization[]
+  createdAt     DateTime       @default(now())
 }

@@ -8,11 +8,10 @@ class WalletManager {
 
   createWallet(name) {
     let paymentKeys = cardano.addressKeyGen(name)
-    let stakeKeys = cardano.stakeAddressKeyGen(name)
-    let stakeAddr = cardano.stakeAddressBuild(name)
+    // let stakeKeys = cardano.stakeAddressKeyGen(name)
+    // let stakeAddr = cardano.stakeAddressBuild(name)
     let paymentAddr = cardano.addressBuild(name, {
       paymentVkey: paymentKeys.vkey,
-      stakeVkey: stakeKeys.vkey,
     })
     return cardano.wallet(name)
   }

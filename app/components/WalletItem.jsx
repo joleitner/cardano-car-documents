@@ -6,8 +6,10 @@ import Spinner from 'react-bootstrap/Spinner'
 import Badge from 'react-bootstrap/Badge'
 import Button from 'react-bootstrap/Button'
 import Modal from 'react-bootstrap/Modal'
+import { Formik } from 'formik'
+import Form from 'react-bootstrap/Form'
 import { useWallet } from '../hooks/useWallet'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 
 
 const convertToAda = (lovelace) => {
@@ -19,33 +21,41 @@ const convertToAda = (lovelace) => {
 } 
 
 
-export default function WalletItem({walletName}) {
-  const {wallet, loading} = useWallet(walletName)
+export default function WalletItem({walletId}) {
+  const {wallet, loading} = useWallet(walletId)
   const [showModal, setShowModal] = useState(false)  
+  const formRef = useRef()
   const handleClose = () => setShowModal(false);
   const handleShow = () => setShowModal(true);
 
-  const deleteWallet = () => {
-    fetch(`/api/wallets`, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({name: wallet.name}),
-    }).then(async (res) => {
-      if (res.status == 200){
-        const deleted = await res.json()
-        if (deleted) {
-          
-          alert("success")
-        }
-      }else {
-        console.log("error")
-      }
-    
-    })
+
+  const validate = (values) => {
+    const errors = {}
+    // address
+    if (!values.address) {
+      errors.address = 'Required'
+    } else if (!values.address.startsWith('addr_')) {
+      errors.address = 'Not a valid cardano address'
+    }
+    // amount
+    if (!values.amount) {
+      errors.amount = 'Required'
+    } else if (values.amount > convertToAda(wallet.balance.value.lovelace)) {
+      errors.amount = `Insufficient balance. Max amount: ${convertToAda(wallet.balance.value.lovelace)}`
+    }
   
+    return errors
   }
+
+  const handleSubmit = () => {
+    if (formRef.current) {
+      formRef.current.handleSubmit()
+      if(formRef.current.isValid){
+        console.log('test')
+      }
+    }
+  }
+  
 
   if(loading) {
     return (
@@ -55,54 +65,104 @@ export default function WalletItem({walletName}) {
         </Spinner>
         </Container>
     )
+  }else{
+    console.log(wallet)
   }
 
   return (
     <>
      <Container className="align-items-center px-3 py-2 border mb-1">
-         
       <Row className='align-items-center'>
         <Link
-          href="/wallets/[name]"
-          as={`/wallets/${wallet.name}`}
+          href="/wallets/[address]"
+          as={`/wallets/${wallet.address}`}
           passHref
         >
           <Col className='col-3'>
-            <Badge bg='primary' className=''>{wallet.name}</Badge>
+            {wallet.address}
                 
           </Col>
         </Link>
-        <Col className='col-1 text-end'>{wallet.user.firstname}</Col>
-        <Col className='col-3'>{wallet.user.lastname}</Col>
         <Col></Col>
         <Col className='col-2 text-end'>{convertToAda(wallet.balance.value.lovelace)} Ada</Col>
-        <Col className='text-end col-2'>
-         <Button variant='outline-danger' onClick={handleShow}>
-          <i class="bi bi-trash-fill"></i>
-        </Button>
-        </Col>
       </Row>
-      {/* <Row className='mt-2'>
-        <Col className='fw-bold col-auto'>Address</Col>
-        <Col className='text-break'>{wallet.paymentAddr}</Col>
-      </Row> */}
      </Container>
+     <Row className="justify-content-center mt-3">
+      <Col className="col-auto">
+        <Button variant="dark" className="px-4" onClick={handleShow}>
+          Create Transaction
+        </Button>
+      </Col>
+    </Row>
 
       {/* Confirmation request */}
      <Modal show={showModal} onHide={handleClose}>
      <Modal.Header closeButton>
-       <Modal.Title>Detele wallet</Modal.Title>
+       <Modal.Title>Create Transaction</Modal.Title>
      </Modal.Header>
-     <Modal.Body>Are you 100% sure you want to delete this wallet? All your assets in the wallet are gone forever! There is no way to restore access.</Modal.Body>
+     <Modal.Body>
+      <Formik
+        innerRef={formRef}
+        onSubmit={(values) => {
+          console.log(values)
+        }}
+        validate={validate}
+        initialValues={{ address: '', amount: '' }}
+      >
+        {({
+          handleSubmit,
+          handleChange,
+          handleBlur,
+          values,
+          touched,
+          errors,
+        }) => (
+          <Form noValidate onSubmit={handleSubmit}>
+            {/* address */}
+            <Form.Group className={'mb-3'} controlId="address">
+              <Form.Label>Payment Address</Form.Label>
+              <Form.Control
+                type="text"
+                name="address"
+                value={values.address}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                isInvalid={touched.address && errors.address}
+              />
+              <Form.Control.Feedback type="invalid">
+                {errors.address}
+              </Form.Control.Feedback>
+            </Form.Group>
+
+            {/* amount */}
+            <Form.Group className={'mb-3'} controlId="amount">
+              <Form.Label>Amount</Form.Label>
+              <Form.Control
+                type="text"
+                name="amount"
+                placeholder="Ada"
+                value={values.amount}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                isInvalid={touched.amount && errors.amount}
+              />
+              <Form.Control.Feedback type="invalid">
+                {errors.amount}
+              </Form.Control.Feedback>
+            </Form.Group>
+          </Form>
+        )}
+      </Formik>
+     </Modal.Body>
      <Modal.Footer>
        <Button variant="secondary" onClick={handleClose}>
          Cancel
        </Button>
        <Button variant="primary" onClick={() => {
+         handleSubmit()
          handleClose()
-         deleteWallet()
          }}>
-         Delete anyway
+         Send
        </Button>
      </Modal.Footer>
    </Modal>
