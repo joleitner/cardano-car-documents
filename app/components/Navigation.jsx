@@ -30,7 +30,11 @@ export default function Navigation() {
             <Link href="/" passHref>
               <Nav.Link>Overview</Nav.Link>
             </Link>
-            {user && (<Link href="/profile" passHref>
+            {user && user.organizationId != null && (<Link href="/manage" passHref>
+              <Nav.Link>Manage</Nav.Link>
+            </Link>)
+            }
+            {user && user.organizationId == 0 && (<Link href="/profile" passHref>
               <Nav.Link>Profile</Nav.Link>
             </Link>)
             }

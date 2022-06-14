@@ -28,6 +28,8 @@ model Wallet {
   id           Int            @id @default(autoincrement())
   address      String?        @unique
   createdAt    DateTime       @default(now())
+  policyId     Int?
+  Policy       Policy?        @relation(fields: [policyId], references: [id], onDelete: SetNull)
   user         User[]
   organization Organization[]
 }
@@ -47,6 +49,9 @@ model Organization {
 
 model Policy {
   id            Int            @id @default(autoincrement())
-  organizations Organization[]
+  policyId      String?
+  policyScript  Json?
   createdAt     DateTime       @default(now())
+  organizations Organization[]
+  Wallet        Wallet[]
 }

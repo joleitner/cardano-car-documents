@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@hapi/iron": "^6.0.0",
+    "@pinata/sdk": "^1.1.26",
     "@prisma/client": "^3.14.0",
     "bcrypt": "^5.0.1",
     "bootstrap": "^5.1.3",

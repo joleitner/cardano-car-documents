@@ -1,13 +1,20 @@
 import nextConnect from 'next-connect'
 import auth from '../../../../middleware/auth'
-import { getOrganizationBySlug } from '../../../../src/models/organizations'
+import { isNumeric } from '../../../../src/helper'
+import {
+  getOrganizationById,
+  getOrganizationBySlug,
+} from '../../../../src/models/organizations'
 
 const handler = nextConnect()
 
 handler.use(auth).get(async (req, res) => {
   const { slug } = req.query
 
-  const organization = await getOrganizationBySlug(id)
+  const organization = isNumeric(slug)
+    ? await getOrganizationById(slug)
+    : await getOrganizationBySlug(slug)
+
   res.json(organization)
 })
 
