@@ -11,6 +11,7 @@ const handler = nextConnect()
 handler
   .use(auth)
   .get(async (req, res) => {
+    const user = await req.user
     if (user?.admin) {
       const result = await getAllUsers()
       res.json(result)

@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@blockfrost/blockfrost-js": "^4.1.0",
     "@hapi/iron": "^6.0.0",
     "@pinata/sdk": "^1.1.26",
     "@prisma/client": "^3.14.0",

@@ -1,18 +1,19 @@
 import cardano from './cardano'
 import Pinata from '../pinata'
+import blockfrostApi from '../blockfrost'
 import { stringToBase16 } from '../helper'
 import { getPolicyById } from '../models/policies'
 
 const pinata = new Pinata()
 
-class NFTManager {
-  async mintOwnerNFT(policyId, creatorId, { vin, thumbnail, specs }) {
+class AssetManager {
+  async mintOwnerNFT(policyId, creatorWalletId, { vin, thumbnail, specs }) {
     const ASSETNAME = vin
     const ASSETNAME_ENCODED = stringToBase16(ASSETNAME)
     const policy = await getPolicyById(policyId)
-    const POLICY_ID = policy.policyId
+    const POLICY_ID = policyId
     const ASSET_ID = POLICY_ID + '.' + ASSETNAME_ENCODED
-    const creatorWallet = cardano.wallet(creatorId)
+    const creatorWallet = cardano.wallet(creatorWalletId)
 
     // 1. upload to pinata
     const resThumbnail = await pinata.uploadCarThumbnail(vin, thumbnail)
@@ -57,7 +58,7 @@ class NFTManager {
           action: 'mint',
           quantity: 1,
           asset: ASSET_ID,
-          script: policy.policyScript,
+          script: policy.script,
         },
       ],
       metadata,
@@ -78,7 +79,7 @@ class NFTManager {
     let tx = cardano.transactionBuildRaw({ ...txInfo, fee })
 
     //6. sign the transaction
-    const policyKeys = cardano.wallet(policy.Wallet[0].id).payment
+    const policyKeys = cardano.wallet(`policy_${policy.Wallet[0].id}`).payment
     let txSigned = cardano.transactionSign({
       txBody: tx,
       signingKeys: [creatorWallet.payment.skey, policyKeys.skey],
@@ -90,6 +91,23 @@ class NFTManager {
 
     return { txHash }
   }
+
+  async getAsset(assetId) {
+    const result = await blockfrostApi.assetsById(assetId)
+    return result
+  }
+
+  async getPolicyAssets(policyId) {
+    const assetNames = await blockfrostApi.assetsPolicyById(policyId)
+
+    // const assets = []
+    // for (const name of assetNames) {
+    //   const asset = await this.getAsset(name.asset)
+    //   assets.push(asset)
+    // }
+
+    return assetNames
+  }
 }
 
-module.exports = NFTManager
+module.exports = AssetManager

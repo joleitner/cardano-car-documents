@@ -1,4 +1,5 @@
 import cardano from './cardano'
+import blockfrostApi from '../blockfrost'
 import fs from 'fs'
 
 class WalletManager {
@@ -14,6 +15,11 @@ class WalletManager {
       paymentVkey: paymentKeys.vkey,
     })
     return cardano.wallet(name)
+  }
+
+  createPolicyKeys(id) {
+    let policyKeys = cardano.addressKeyGen(`policy_${id}`)
+    return cardano.wallet(`policy_${id}`)
   }
 
   deleteWallet(name) {
@@ -38,9 +44,21 @@ class WalletManager {
     return cardano.wallet(name)
   }
 
-  showBalance(name) {
+  async getWalletInfo(name) {
+    let wallet = cardano.wallet(name)
+    const info = await blockfrostApi.addresses(wallet.paymentAddr)
+    return info
+  }
+
+  async showBalance(name) {
     let wallet = cardano.wallet(name)
     return wallet.balance()
+  }
+
+  getTransactionHistory(name) {
+    const wallet = cardano.wallet(name)
+    const transactions = blockfrostApi.addressesTransactions(wallet.paymentAddr)
+    return transactions
   }
 }
 

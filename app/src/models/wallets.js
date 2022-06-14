@@ -38,9 +38,11 @@ export async function getWalletById(id) {
     },
   })
   if (wallet) {
-    const balance = walletManager.showBalance(wallet.id)
-    wallet.balance = balance
-    return wallet
+    const info = await walletManager.getWalletInfo(wallet.id)
+    return {
+      ...wallet,
+      amount: info.amount,
+    }
   } else {
     return {}
   }
@@ -53,9 +55,11 @@ export async function getWalletByAddress(address) {
     },
   })
   if (wallet) {
-    const balance = walletManager.showBalance(wallet.id)
-    wallet.balance = balance
-    return wallet
+    const info = await walletManager.getWalletInfo(wallet.id)
+    return {
+      ...wallet,
+      amount: info.amount,
+    }
   } else {
     return {}
   }

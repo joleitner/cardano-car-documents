@@ -14,6 +14,10 @@ class Pinata {
     const data = await pinata.testAuthentication()
     return data
   }
+  async pinList() {
+    const result = await pinata.pinList()
+    return result
+  }
 
   async uploadCarThumbnail(vin, file) {
     const readableStreamForFile = fs.createReadStream(
