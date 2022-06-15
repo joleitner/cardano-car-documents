@@ -18,8 +18,8 @@ class WalletManager {
   }
 
   createPolicyKeys(id) {
-    let policyKeys = cardano.addressKeyGen(`policy_${id}`)
-    return cardano.wallet(`policy_${id}`)
+    let policyKeys = cardano.addressKeyGen(`${id}_policy`)
+    return cardano.wallet(`${id}_policy`)
   }
 
   deleteWallet(name) {

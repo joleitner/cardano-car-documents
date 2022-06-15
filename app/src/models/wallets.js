@@ -23,7 +23,7 @@ export async function createWallet() {
 
   // every new created wallet gets 5 Ada to experiment
   transactionManager.createTransaction(
-    walletManager.getWallet('main'),
+    walletManager.getWallet('1'), // from main (1) wallet
     cardanoWallet.paymentAddr,
     5
   )

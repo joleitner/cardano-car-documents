@@ -18,6 +18,7 @@ CREATE TABLE "Wallet" (
     "id" SERIAL NOT NULL,
     "address" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "policyId" TEXT,
 
     CONSTRAINT "Wallet_pkey" PRIMARY KEY ("id")
 );
@@ -36,16 +37,19 @@ CREATE TABLE "Organization" (
 
 -- CreateTable
 CREATE TABLE "Policy" (
-    "id" SERIAL NOT NULL,
+    "policyId" TEXT NOT NULL,
+    "type" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "script" JSONB,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
-    CONSTRAINT "Policy_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "Policy_pkey" PRIMARY KEY ("policyId")
 );
 
 -- CreateTable
 CREATE TABLE "_OrganizationToPolicy" (
     "A" INTEGER NOT NULL,
-    "B" INTEGER NOT NULL
+    "B" TEXT NOT NULL
 );
 
 -- CreateIndex
@@ -73,10 +77,13 @@ ALTER TABLE "User" ADD CONSTRAINT "User_walletId_fkey" FOREIGN KEY ("walletId") 
 ALTER TABLE "User" ADD CONSTRAINT "User_organizationId_fkey" FOREIGN KEY ("organizationId") REFERENCES "Organization"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "Wallet" ADD CONSTRAINT "Wallet_policyId_fkey" FOREIGN KEY ("policyId") REFERENCES "Policy"("policyId") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "Organization" ADD CONSTRAINT "Organization_walletId_fkey" FOREIGN KEY ("walletId") REFERENCES "Wallet"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "_OrganizationToPolicy" ADD CONSTRAINT "_OrganizationToPolicy_A_fkey" FOREIGN KEY ("A") REFERENCES "Organization"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "_OrganizationToPolicy" ADD CONSTRAINT "_OrganizationToPolicy_B_fkey" FOREIGN KEY ("B") REFERENCES "Policy"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "_OrganizationToPolicy" ADD CONSTRAINT "_OrganizationToPolicy_B_fkey" FOREIGN KEY ("B") REFERENCES "Policy"("policyId") ON DELETE CASCADE ON UPDATE CASCADE;

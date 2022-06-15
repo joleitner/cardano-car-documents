@@ -79,7 +79,7 @@ class AssetManager {
     let tx = cardano.transactionBuildRaw({ ...txInfo, fee })
 
     //6. sign the transaction
-    const policyKeys = cardano.wallet(`policy_${policy.Wallet[0].id}`).payment
+    const policyKeys = cardano.wallet(`${policy.Wallet[0].id}_policy`).payment
     let txSigned = cardano.transactionSign({
       txBody: tx,
       signingKeys: [creatorWallet.payment.skey, policyKeys.skey],

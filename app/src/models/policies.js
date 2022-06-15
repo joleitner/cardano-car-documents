@@ -25,13 +25,13 @@ export async function createNewPolicy(organizationId, type, name) {
     case 'owner':
       policyScript = {
         type: 'sig',
-        keyHash: cardano.addressKeyHash(wallet.id),
+        keyHash: cardano.addressKeyHash(`${wallet.id}_policy`),
       }
       break
     case 'registration':
       policyScript = {
         type: 'sig',
-        keyHash: cardano.addressKeyHash(wallet.id),
+        keyHash: cardano.addressKeyHash(`${wallet.id}_policy`),
       }
   }
 
