@@ -20,9 +20,7 @@ class Pinata {
   }
 
   async uploadCarThumbnail(vin, file) {
-    const readableStreamForFile = fs.createReadStream(
-      '/usr/src/app/thumbnails/porsche-model.png'
-    )
+    const readableStreamForFile = fs.createReadStream(file.filepath)
     const options = {
       pinataMetadata: {
         name: `${vin}_img`,
@@ -31,7 +29,6 @@ class Pinata {
         cidVersion: 0,
       },
     }
-
     const result = await pinata.pinFileToIPFS(readableStreamForFile, options)
     return result
   }

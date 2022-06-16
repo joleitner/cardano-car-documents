@@ -28,6 +28,20 @@ export async function createUser({ email, firstname, lastname, password }) {
   return user
 }
 
+export async function updateUser(id, newData) {
+  if (newData.organizationId) {
+    newData.organizationId = parseInt(newData.organizationId)
+  }
+
+  let user = await prisma.user.update({
+    where: {
+      id: parseInt(id),
+    },
+    data: newData,
+  })
+  return user
+}
+
 export async function getUserByEmail(email) {
   const user = await prisma.user.findUnique({
     where: {

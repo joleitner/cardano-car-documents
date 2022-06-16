@@ -7,19 +7,20 @@ import { getPolicyById } from '../models/policies'
 const pinata = new Pinata()
 
 class AssetManager {
-  async mintOwnerNFT(policyId, creatorWalletId, { vin, thumbnail, specs }) {
-    const ASSETNAME = vin
+  async mintOwnerNFT(policyId, creatorWalletId, { vin, image, specs }) {
+    const ASSETNAME = `Owner ${vin}`
     const ASSETNAME_ENCODED = stringToBase16(ASSETNAME)
     const policy = await getPolicyById(policyId)
     const POLICY_ID = policyId
     const ASSET_ID = POLICY_ID + '.' + ASSETNAME_ENCODED
+    console.log(creatorWalletId)
     const creatorWallet = cardano.wallet(creatorWalletId)
 
     // 1. upload to pinata
-    const resThumbnail = await pinata.uploadCarThumbnail(vin, thumbnail)
+    const resThumbnail = await pinata.uploadCarThumbnail(vin, image)
     const resSpecs = await pinata.uploadCarTechspec(vin, specs)
 
-    //2. define metadata with CIP-25 standard
+    // //2. define metadata with CIP-25 standard
     const metadata = {
       721: {
         [POLICY_ID]: {
@@ -28,7 +29,7 @@ class AssetManager {
             image: `ipfs://${resThumbnail.IpfsHash}`,
             files: [
               {
-                name: `${vin}_img`,
+                name: `${vin}_techspecs`,
                 mediaType: 'application/json',
                 src: `ipfs://${resSpecs.IpfsHash}`,
               },
@@ -85,7 +86,7 @@ class AssetManager {
       signingKeys: [creatorWallet.payment.skey, policyKeys.skey],
     })
 
-    //7. finally broadcast transaction and mint nft
+    // 7. finally broadcast transaction and mint nft
     let txHash = cardano.transactionSubmit(txSigned)
     console.log('TxHash: ' + txHash)
 

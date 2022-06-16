@@ -13,7 +13,7 @@ export async function createOrganization({ name, slug, type, description }) {
 
   // if a organization gets created it directly gets a wallet assigned
   const wallet = await createWallet()
-  user = await prisma.organization.update({
+  organization = await prisma.organization.update({
     where: {
       id: organization.id,
     },

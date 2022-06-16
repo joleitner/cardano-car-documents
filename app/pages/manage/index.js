@@ -9,11 +9,21 @@ import { Formik } from 'formik'
 import { useUser } from '../../hooks/useUser'
 import { useOrganization } from '../../hooks/useOrganization'
 import WalletItem from '../../components/WalletItem'
+import PolicyList from '../../components/PolicyList'
 
 export default function ManageOrganization() {
   const [user] = useUser()
   const { organization, loading } = useOrganization(user?.organizationId)
 
+  if (loading) {
+    return (
+      <Container className="text-center">
+        <Spinner animation="border" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </Spinner>
+      </Container>
+    )
+  }
   if (user?.organizationId == null) {
     return (
       <Container className={'w-75 mb-5'}>
@@ -24,20 +34,15 @@ export default function ManageOrganization() {
     )
   }
 
-  if (loading) {
-    return (
-      <Spinner animation="border" role="status">
-        <span className="visually-hidden">Loading...</span>
-      </Spinner>
-    )
-  }
-
   return (
     <>
       <h2 className="mb-5">Manage - {organization.name}</h2>
-
+      <div className="fw-bold fs-5 mb-3">Wallet</div>
       <WalletItem walletId={organization.walletId} />
       <hr />
+      <div className="fw-bold fs-5 mb-3">Policies</div>
+      <PolicyList organizationId={organization.id} />
+      {/* <hr />
       <Container className={'w-75 mb-5'}>
         <Container className={'mt-5'}>
           <Row>
@@ -53,7 +58,7 @@ export default function ManageOrganization() {
             </Col>
           </Row>
         </Container>
-      </Container>
+      </Container> */}
     </>
   )
 }

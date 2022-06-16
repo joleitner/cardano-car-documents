@@ -39,10 +39,10 @@ export async function createNewPolicy(organizationId, type, name) {
   // update policy with actual policyId
   policy = await prisma.policy.update({
     where: {
-      policyId: policy.id,
+      policyId: policy.policyId,
     },
     data: {
-      policyId,
+      policyId: policyId,
       script: policyScript,
     },
   })
@@ -67,12 +67,36 @@ export async function getPolicyById(id) {
     },
     include: {
       Wallet: true,
+      organizations: true,
     },
   })
   return policy
 }
 
 export async function getAllPolicies() {
-  let policies = await prisma.policy.findMany()
+  let policies = await prisma.policy.findMany({
+    include: {
+      organizations: true,
+    },
+  })
+  return policies
+}
+
+export async function getPoliciesFromOrganization(organizationId) {
+  let policies = await prisma.organization
+    .findUnique({ where: { id: organizationId } })
+    .policies()
+  // let policies = await prisma.policy.findMany({
+  //   where: {
+  //     organizations: {
+  //       every: {
+  //         id: organizationId,
+  //       },
+  //     },
+  //   },
+  //   // include: {
+  //   //   organizations: true,
+  //   // },
+  // })
   return policies
 }

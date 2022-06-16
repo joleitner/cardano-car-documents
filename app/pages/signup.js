@@ -66,8 +66,9 @@ const Signup = () => {
       <h2>Signup</h2>
       <Formik
         initialValues={{ email: '', password: '', rpassword: '' }}
-        onSubmit={(values) => {
+        onSubmit={(values, { resetForm }) => {
           submitForm(values)
+          resetForm()
         }}
         validate={validate}
       >

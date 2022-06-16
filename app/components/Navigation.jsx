@@ -8,11 +8,11 @@ import { useUser } from '../hooks/useUser'
 import { useEffect } from 'react'
 
 export default function Navigation() {
-  const [user, {mutate}] = useUser()
+  const [user, { mutate }] = useUser()
 
   const logout = () => {
     fetch('api/auth/logout').then((res) => {
-        mutate(undefined)
+      mutate(undefined)
     })
   }
 
@@ -20,9 +20,7 @@ export default function Navigation() {
     <Navbar bg="dark" variant="dark" expand="lg" fixed="top" collapseOnSelect>
       <Container className={'text-uppercase'}>
         <Link href="/" passHref>
-          <Navbar.Brand>
-            CardanoCars
-          </Navbar.Brand>
+          <Navbar.Brand>CardanoCars</Navbar.Brand>
         </Link>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
@@ -30,27 +28,36 @@ export default function Navigation() {
             <Link href="/" passHref>
               <Nav.Link>Overview</Nav.Link>
             </Link>
-            {user && user.organizationId != null && (<Link href="/manage" passHref>
-              <Nav.Link>Manage</Nav.Link>
-            </Link>)
-            }
-            {user && user.organizationId == 0 && (<Link href="/profile" passHref>
-              <Nav.Link>Profile</Nav.Link>
-            </Link>)
-            }
+            {user && user.organizationId != null && (
+              <Link href="/manage" passHref>
+                <Nav.Link>Manage</Nav.Link>
+              </Link>
+            )}
+            {user && user.admin && (
+              <Link href="/admin" passHref>
+                <Nav.Link>Admin</Nav.Link>
+              </Link>
+            )}
+            {user && user.organizationId == 0 && (
+              <Link href="/profile" passHref>
+                <Nav.Link>Profile</Nav.Link>
+              </Link>
+            )}
             <Link href="/about" passHref>
               <Nav.Link>About</Nav.Link>
             </Link>
           </Nav>
           <Nav className={'align-items-lg-center'}>
-            {!user && 
-              (<Link href="/login" passHref>
+            {!user && (
+              <Link href="/login" passHref>
                 <Button variant="outline-light">Login</Button>
-              </Link>)
-            }
-            {user && 
-              (<Button variant="outline-light" onClick={logout}>Logout</Button>)
-            }
+              </Link>
+            )}
+            {user && (
+              <Button variant="outline-light" onClick={logout}>
+                Logout
+              </Button>
+            )}
           </Nav>
         </Navbar.Collapse>
       </Container>

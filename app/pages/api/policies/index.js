@@ -20,7 +20,6 @@ handler
       return res.json({ status: 401, message: 'Unauthorized' })
     }
     const { type, name } = req.body
-
     const policy = createNewPolicy(user.organizationId, type, name)
 
     res.json({ status: 200, message: 'New policy created!', policy })
