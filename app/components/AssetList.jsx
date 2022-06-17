@@ -27,7 +27,7 @@ export default function AssetList({ assets }) {
   if (assetIds.length > 0) {
     return (
       <>
-        <div className="fw-bold fs-5 my-4">NFTs</div>
+        <div className="fw-bold fs-6 my-4 text-center ">NFTs</div>
         <Container className="p-1 d-flex justify-content-center">
           {assetIds.map((assetId, i) => (
             <AssetItem assetId={assetId} key={i} />
@@ -36,8 +36,6 @@ export default function AssetList({ assets }) {
       </>
     )
   } else {
-    return (
-      <Container className="text-center my-3">No NFT's in wallet</Container>
-    )
+    return <Container className="text-center my-3">No NFT's yet</Container>
   }
 }

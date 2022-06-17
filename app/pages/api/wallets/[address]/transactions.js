@@ -1,6 +1,8 @@
 import nextConnect from 'next-connect'
 import auth from '../../../../middleware/auth'
 import WalletManager from '../../../../src/cardano/walletManager'
+import TransactionManager from '../../../../src/cardano/transactionManager'
+import AssetManager from '../../../../src/cardano/assetManager'
 import {
   getWalletByAddress,
   getWalletById,
@@ -8,6 +10,8 @@ import {
 
 const handler = nextConnect()
 const walletManager = new WalletManager()
+const assetManager = new AssetManager()
+const transactionManager = new TransactionManager()
 
 handler
   .use(auth)
@@ -25,8 +29,34 @@ handler
     res.json({})
   })
   .post(async (req, res) => {
-    //todo
-    res.json({ status: 111 })
+    const { address } = req.query
+    const { receiver_address, amount, assetId } = req.body
+
+    const wallet = address.startsWith('addr_')
+      ? await getWalletByAddress(address)
+      : await getWalletById(address)
+
+    // check wallet
+    if (!wallet) {
+      return res.json({ message: 'No valid sender address' })
+    }
+    // check asset
+    let asset = {}
+    if (assetId) {
+      asset = await assetManager.getAsset(assetId)
+      if (!asset) {
+        return res.json({ message: 'No valid asset id' })
+      }
+    }
+
+    // create transaction
+    const txInfo = await transactionManager.createTransaction(
+      wallet.id,
+      receiver_address,
+      amount,
+      asset
+    )
+    res.json(txInfo)
   })
 
 export default handler

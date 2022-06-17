@@ -1,9 +1,12 @@
 import cardano from './cardano'
 
 class TransactionManager {
-  createTransaction(sender, receiver, amountAda) {
+  async createTransaction(sender_walletId, receiver_address, amountAda, asset) {
     // sender value fix for undefined value
     // all values need to be included in case sender has tokens
+    const sender = cardano.wallet(sender_walletId)
+    const ASSET_ID = asset ? asset.policy_id + '.' + asset.asset_name : null
+
     let senderValues = sender.balance().value
     delete senderValues.undefined
 
@@ -22,11 +25,21 @@ class TransactionManager {
         },
         //value going to receiver
         {
-          address: receiver,
+          address: receiver_address,
           value: { lovelace: cardano.toLovelace(amountAda) },
         },
       ],
-      // metadata: { 1: { cardano: "First Metadata from cardanocli-js" } },
+    }
+    // check if an asset is selected then add it to the transaction
+    if (asset) {
+      txInfo.txOut[0].value[ASSET_ID] = 0 //only for nfts with quantitiy 1
+      txInfo.txOut[1].value[ASSET_ID] = 1
+      // min amount 1.5 Ada with tokens
+      if (txInfo.txOut[1].value.lovelace < 1.5) {
+        let diff = 1.5 - txInfo.txOut[1].value.lovelace
+        txInfo.txOut[1].value.lovelace += diff
+        txInfo.txOut[0].value.lovelace -= diff
+      }
     }
 
     let raw = cardano.transactionBuildRaw(txInfo)

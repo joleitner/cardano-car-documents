@@ -11,7 +11,7 @@ export default function Navigation() {
   const [user, { mutate }] = useUser()
 
   const logout = () => {
-    fetch('api/auth/logout').then((res) => {
+    fetch('/api/auth/logout').then((res) => {
       mutate(undefined)
     })
   }
@@ -38,7 +38,7 @@ export default function Navigation() {
                 <Nav.Link>Admin</Nav.Link>
               </Link>
             )}
-            {user && user.organizationId == 0 && (
+            {user && user.organizationId == null && (
               <Link href="/profile" passHref>
                 <Nav.Link>Profile</Nav.Link>
               </Link>

@@ -15,21 +15,21 @@ export default function ManageOrganization() {
   const [user] = useUser()
   const { organization, loading } = useOrganization(user?.organizationId)
 
-  if (loading) {
-    return (
-      <Container className="text-center">
-        <Spinner animation="border" role="status">
-          <span className="visually-hidden">Loading...</span>
-        </Spinner>
-      </Container>
-    )
-  }
   if (user?.organizationId == null) {
     return (
       <Container className={'w-75 mb-5'}>
         <Alert variant="danger" className="text-center">
           Unauthorized
         </Alert>
+      </Container>
+    )
+  }
+  if (loading) {
+    return (
+      <Container className="text-center">
+        <Spinner animation="border" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </Spinner>
       </Container>
     )
   }

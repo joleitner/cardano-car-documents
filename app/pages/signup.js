@@ -65,7 +65,13 @@ const Signup = () => {
     <Container className={'w-50 mb-5'}>
       <h2>Signup</h2>
       <Formik
-        initialValues={{ email: '', password: '', rpassword: '' }}
+        initialValues={{
+          firstname: '',
+          lastname: '',
+          email: '',
+          password: '',
+          rpassword: '',
+        }}
         onSubmit={(values, { resetForm }) => {
           submitForm(values)
           resetForm()

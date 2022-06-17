@@ -34,6 +34,7 @@ class AssetManager {
                 src: `ipfs://${resSpecs.IpfsHash}`,
               },
             ],
+            vin: vin,
           },
         },
       },
@@ -95,18 +96,18 @@ class AssetManager {
 
   async getAsset(assetId) {
     const result = await blockfrostApi.assetsById(assetId)
-    return result
+    const addresses = await blockfrostApi.assetsAddresses(assetId)
+
+    return { ...result, owner_address: addresses[0].address }
   }
 
   async getPolicyAssets(policyId) {
     const assetNames = await blockfrostApi.assetsPolicyById(policyId)
-
     // const assets = []
     // for (const name of assetNames) {
     //   const asset = await this.getAsset(name.asset)
     //   assets.push(asset)
     // }
-
     return assetNames
   }
 }

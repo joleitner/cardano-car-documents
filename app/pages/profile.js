@@ -14,7 +14,6 @@ export default function ProfilePage() {
 
   useEffect(() => {
     // redirect user to login if not authenticated
-
     if (!loading && !user) router.replace('/login')
   }, [user, loading])
 
@@ -29,13 +28,12 @@ export default function ProfilePage() {
   return (
     <>
       <h1>
-        {user.firstname} {user.lastname}
+        {user?.firstname} {user?.lastname}
       </h1>
       <hr />
       <Container className="mb-4">
         <h3>Wallet</h3>
         <WalletItem walletId={user.walletId} />
-        {/* <WalletList wallets={user.wallets} /> */}
       </Container>
     </>
   )

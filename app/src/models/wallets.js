@@ -1,9 +1,11 @@
 import prisma from '../prisma'
 import WalletManager from '../cardano/walletManager'
 import TransactionManager from '../cardano/transactionManager'
+import AssetManager from '../cardano/assetManager'
 
 const walletManager = new WalletManager()
 const transactionManager = new TransactionManager()
+const assetManager = new AssetManager()
 
 export async function createWallet() {
   let wallet = await prisma.wallet.create({
@@ -23,7 +25,7 @@ export async function createWallet() {
 
   // every new created wallet gets 5 Ada to experiment with
   transactionManager.createTransaction(
-    walletManager.getWallet('1'), // from main (1) wallet
+    '1', // from main (1) wallet
     cardanoWallet.paymentAddr,
     5
   )
@@ -63,6 +65,20 @@ export async function getWalletByAddress(address) {
   } else {
     return {}
   }
+}
+
+export async function getWalletAssets(id) {
+  const wallet = await getWalletById(id)
+  const assets = []
+  if (wallet) {
+    for (const key in wallet.amount) {
+      if (wallet.amount[key].unit != 'lovelace') {
+        const asset = await assetManager.getAsset(wallet.amount[key].unit)
+        assets.push(asset)
+      }
+    }
+  }
+  return assets
 }
 
 export async function getWalletByUser(id) {
