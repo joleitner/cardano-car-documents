@@ -14,14 +14,9 @@ import { useAsset } from '../../hooks/useAsset'
 import { usePolicy } from '../../hooks/usePolicy'
 
 const getAssetImgAddress = (asset) => {
-  const ipfsAddress =
-    asset.onchain_metadata[asset.policy_id][asset.asset_name].image
+  const ipfsAddress = asset.onchain_metadata.image
   const httpsAddress = ipfsAddress.replace('ipfs://', 'https://ipfs.io/ipfs/')
   return httpsAddress
-}
-
-const getOnChainData = (asset) => {
-  return asset.onchain_metadata[asset.policy_id][asset.asset_name]
 }
 
 export default function NFT() {
@@ -32,8 +27,7 @@ export default function NFT() {
   const [techSpecs, setTechSpecs] = useState([])
 
   const getAssetJson = async (asset) => {
-    const ipfsAddress =
-      asset.onchain_metadata[asset.policy_id][asset.asset_name].files[0].src
+    const ipfsAddress = asset.onchain_metadata.files[0].src
     const httpsAddress = ipfsAddress.replace('ipfs://', 'https://ipfs.io/ipfs/')
 
     const res = await fetch(httpsAddress)
@@ -86,7 +80,7 @@ export default function NFT() {
             >
               {policy?.organizations[0].name}
             </Card.Subtitle>
-            <Card.Title>{getOnChainData(asset).name}</Card.Title>
+            <Card.Title>{asset.onchain_metadata.name}</Card.Title>
             <Card.Text>{policy?.name}</Card.Text>
 
             <hr />

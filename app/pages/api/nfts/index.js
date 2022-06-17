@@ -19,7 +19,11 @@ handler
       const policyAssets = await assetManager.getPolicyAssets(
         policies[key].policyId
       )
-      assets.push(...policyAssets)
+      policyAssets.forEach((asset) => {
+        if (asset.quantity > 0) {
+          assets.push(asset)
+        }
+      })
     }
     res.json(assets)
   })

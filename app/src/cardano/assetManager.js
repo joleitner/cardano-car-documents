@@ -23,7 +23,7 @@ class AssetManager {
     const metadata = {
       721: {
         [POLICY_ID]: {
-          [ASSETNAME_ENCODED]: {
+          [ASSETNAME]: {
             name: ASSETNAME,
             image: `ipfs://${resThumbnail.IpfsHash}`,
             files: [

@@ -31,14 +31,9 @@ export default function AssetItem({ assetId }) {
   }
 
   const getAssetImgAddress = (asset) => {
-    const ipfsAddress =
-      asset.onchain_metadata[asset.policy_id][asset.asset_name].image
+    const ipfsAddress = asset.onchain_metadata.image
     const httpsAddress = ipfsAddress.replace('ipfs://', 'https://ipfs.io/ipfs/')
     return httpsAddress
-  }
-
-  const getOnChainData = (asset) => {
-    return asset.onchain_metadata[asset.policy_id][asset.asset_name]
   }
 
   return (
@@ -58,7 +53,7 @@ export default function AssetItem({ assetId }) {
             >
               {policy?.organizations[0].name}
             </Card.Subtitle>
-            <Card.Title>{getOnChainData(asset).name}</Card.Title>
+            <Card.Title>{asset.onchain_metadata.name}</Card.Title>
             <Card.Text>{policy?.name}</Card.Text>
           </Card.Body>
         </Card>
