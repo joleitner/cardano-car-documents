@@ -3,6 +3,8 @@ import auth from '../../../middleware/auth'
 import parseMultipartForm from '../../../middleware/multipart-form-parser'
 import { getOrganizationById } from '../../../src/models/organizations'
 import AssetManager from '../../../src/cardano/assetManager'
+import { getAllPolicies } from '../../../src/models/policies'
+import { getWalletByAddress } from '../../../src/models/wallets'
 
 const handler = nextConnect()
 const assetManager = new AssetManager()
@@ -10,10 +12,16 @@ const assetManager = new AssetManager()
 handler
   .use(auth)
   .get(async (req, res) => {
-    // const result = await assetManager.getAsset(
-    //   '0b29c6c5158586f1ce1820a595f8c985c87b243e5205a3188bbc142731'
-    // )
-    // res.json(result)
+    const policies = await getAllPolicies()
+
+    let assets = []
+    for (const key in policies) {
+      const policyAssets = await assetManager.getPolicyAssets(
+        policies[key].policyId
+      )
+      assets.push(...policyAssets)
+    }
+    res.json(assets)
   })
   .use(parseMultipartForm)
   .post(async (req, res) => {
@@ -35,12 +43,20 @@ handler
       specs: specs,
     }
 
-    const txHash = await assetManager.mintOwnerNFT(
+    const txInfo = await assetManager.mintOwnerNFT(
       policyId,
       creatorWalletId,
       nftData
     )
-    res.status(201).json({ message: 'New NFT created!', txHash: txHash })
+    res.status(201).json(txInfo)
+  })
+  .delete(async (req, res) => {
+    const { assetId } = req.body
+    const asset = await assetManager.getAsset(assetId)
+    const wallet = await getWalletByAddress(asset.owner_address)
+
+    const txInfo = await assetManager.burnNFT(asset.policy_id, wallet.id, asset)
+    res.json(txInfo)
   })
 
 export const config = {

@@ -1,12 +1,24 @@
-import { useUser } from '../hooks/useUser'
+import AssetList from '../components/AssetList'
+import Container from 'react-bootstrap/Container'
+import { useState, useEffect } from 'react'
 
 export default function Home() {
-  const [user] = useUser()
+  const [assets, setAssets] = useState([])
 
-  let name = ''
-  if (user) {
-    name = user.firstname
+  const getAllAssets = async () => {
+    fetch('api/nfts').then(async (res) => {
+      setAssets(await res.json())
+    })
   }
 
-  return <div>hello {name}</div>
+  useEffect(() => {
+    getAllAssets()
+  }, [])
+
+  return (
+    <Container className={'mb-5'}>
+      <div className="text-center fw-bold fs-5 mb-3">Cardano Car NFTs</div>
+      <AssetList assets={assets} />
+    </Container>
+  )
 }

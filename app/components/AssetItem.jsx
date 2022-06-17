@@ -47,9 +47,9 @@ export default function AssetItem({ assetId }) {
         <Card style={cardStyle} className="m-3 shadow-sm">
           <Card.Img
             variant="top"
+            height="250px"
             src={getAssetImgAddress(asset)}
             alt="loading.."
-            // style={{ borderTopLeftRadius: '10px', borderTopRightRadius: '10px' }}
           />
           <Card.Body className={'text-center'}>
             <Card.Subtitle
@@ -68,6 +68,7 @@ export default function AssetItem({ assetId }) {
 }
 
 const cardStyle = {
+  // height: '370px',
   minWidth: '21rem',
   maxWidth: '21rem',
   borderRadius: '5px',

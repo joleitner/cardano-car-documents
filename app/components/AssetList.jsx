@@ -2,8 +2,6 @@ import Container from 'react-bootstrap/Container'
 import AssetItem from './AssetItem'
 
 export default function AssetList({ assets }) {
-  let assetIds = []
-
   if (!assets) {
     return (
       <Container className="px-3 py-2 border mb-1 text-center">
@@ -14,6 +12,7 @@ export default function AssetList({ assets }) {
     )
   }
 
+  let assetIds = []
   for (const key in assets) {
     if (typeof assets[key].unit == 'string') {
       // don't put first -> lovelace
@@ -21,16 +20,15 @@ export default function AssetList({ assets }) {
         assetIds.push(assets[key].unit)
       }
     } else {
-      assetIds.push(assets[key].unit)
+      assetIds.push(assets[key].asset)
     }
   }
   if (assetIds.length > 0) {
     return (
       <>
-        <div className="fw-bold fs-6 my-4 text-center ">NFTs</div>
-        <Container className="p-1 d-flex justify-content-center">
+        <Container className="p-1 d-flex flex-wrap justify-content-center">
           {assetIds.map((assetId, i) => (
-            <AssetItem assetId={assetId} key={i} />
+            <AssetItem assetId={assetId} key={i} number={i} />
           ))}
         </Container>
       </>

@@ -31,7 +31,7 @@ class TransactionManager {
       ],
     }
     // check if an asset is selected then add it to the transaction
-    if (asset) {
+    if (ASSET_ID) {
       txInfo.txOut[0].value[ASSET_ID] = 0 //only for nfts with quantitiy 1
       txInfo.txOut[1].value[ASSET_ID] = 1
       // min amount 1.5 Ada with tokens

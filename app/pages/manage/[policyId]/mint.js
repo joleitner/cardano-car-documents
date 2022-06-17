@@ -7,14 +7,25 @@ import Container from 'react-bootstrap/Container'
 import Alert from 'react-bootstrap/Alert'
 import Spinner from 'react-bootstrap/Spinner'
 import Form from 'react-bootstrap/Form'
+import Toast from 'react-bootstrap/Toast'
 import { useRouter } from 'next/router'
 import { Formik } from 'formik'
 import { useUser } from '../../../hooks/useUser'
+
+const convertToAda = (lovelace) => {
+  if (lovelace) {
+    return lovelace / 1000000
+  } else {
+    return 0
+  }
+}
 
 export default function MintNFT() {
   const [user, { loading }] = useUser()
   const [errorMsg, setErrorMsg] = useState('')
   const [successMsg, setSuccessMsg] = useState('')
+  const [showToast, setShowToast] = useState(false)
+  const [toastMsg, setToastMsg] = useState('')
   const router = useRouter()
   const { policyId } = router.query
 
@@ -71,6 +82,10 @@ export default function MintNFT() {
     if (!values.vehicle_class) {
       errors.vehicle_class = 'Required'
     }
+    //energy_source
+    if (!values.energy_source) {
+      errors.energy_source = 'Required'
+    }
     //color
     if (!values.color) {
       errors.color = 'Required'
@@ -90,11 +105,28 @@ export default function MintNFT() {
       body: formData,
     }).then(async (res) => {
       if (res.status === 201) {
-        const json = await res.json()
+        const txInfo = await res.json()
         setErrorMsg('')
-        setSuccessMsg(
-          `Successfully minted a new NFT\nTransaction Hash: ${json.txHash}`
+        setSuccessMsg('Successfully minted a new NFT')
+        let msg = (
+          <>
+            <div>
+              <span className="fw-bold">Transaction: </span>{' '}
+              <a
+                href={`https://explorer.cardano-testnet.iohkdev.io/en/transaction?id=${txInfo.txHash}`}
+                target="_blank"
+              >
+                {txInfo.txHash}
+              </a>
+            </div>
+            <div>
+              <span className="fw-bold">Transaction Fee: </span>
+              {convertToAda(txInfo.fee)} Ada
+            </div>
+          </>
         )
+        setToastMsg(msg)
+        setShowToast(true)
         setTimeout(() => setSuccessMsg(''), 3000)
       } else {
         setErrorMsg(await res.text())
@@ -119,8 +151,9 @@ export default function MintNFT() {
             empty_mass: '',
             vehicle_class: '',
             color: '',
+            energy_source: '',
           }}
-          onSubmit={async (values, resetForm) => {
+          onSubmit={async (values, { resetForm }) => {
             submitForm(values)
             resetForm()
           }}
@@ -263,6 +296,21 @@ export default function MintNFT() {
                   {errors.vehicle_class}
                 </Form.Control.Feedback>
               </Form.Group>
+              {/* energy_source */}
+              <Form.Group className={'mb-3'} controlId="data">
+                <Form.Label>P.1 - Fuel type or energy source</Form.Label>
+                <Form.Control
+                  type="text"
+                  name="energy_source"
+                  value={values.energy_source}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  isInvalid={touched.energy_source && errors.energy_source}
+                />
+                <Form.Control.Feedback type="invalid">
+                  {errors.energy_source}
+                </Form.Control.Feedback>
+              </Form.Group>
               {/* color */}
               <Form.Group className={'mb-3'} controlId="data">
                 <Form.Label>R - Vehicle color</Form.Label>
@@ -294,6 +342,19 @@ export default function MintNFT() {
           )}
         </Formik>
       </Container>
+      {/* transaction notification toast */}
+      <Toast
+        onClose={() => {
+          setShowToast(false)
+        }}
+        show={showToast}
+        style={{ position: 'fixed', bottom: 10, right: 10 }}
+      >
+        <Toast.Header>
+          <strong className="me-auto">Transaction successfully created</strong>
+        </Toast.Header>
+        <Toast.Body>{toastMsg}</Toast.Body>
+      </Toast>
     </>
   )
 }

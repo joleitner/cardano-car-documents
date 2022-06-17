@@ -41,7 +41,7 @@ handler
       return res.json({ message: 'No valid sender address' })
     }
     // check asset
-    let asset = {}
+    let asset = null
     if (assetId) {
       asset = await assetManager.getAsset(assetId)
       if (!asset) {

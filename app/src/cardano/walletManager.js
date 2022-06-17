@@ -46,8 +46,12 @@ class WalletManager {
 
   async getWalletInfo(name) {
     let wallet = cardano.wallet(name)
-    const info = await blockfrostApi.addresses(wallet.paymentAddr)
-    return info
+    try {
+      const info = await blockfrostApi.addresses(wallet.paymentAddr)
+      return info
+    } catch (error) {
+      return {}
+    }
   }
 
   async showBalance(name) {
@@ -57,8 +61,14 @@ class WalletManager {
 
   getTransactionHistory(name) {
     const wallet = cardano.wallet(name)
-    const transactions = blockfrostApi.addressesTransactions(wallet.paymentAddr)
-    return transactions
+    try {
+      const transactions = blockfrostApi.addressesTransactions(
+        wallet.paymentAddr
+      )
+      return transactions
+    } catch (error) {
+      return {}
+    }
   }
 }
 

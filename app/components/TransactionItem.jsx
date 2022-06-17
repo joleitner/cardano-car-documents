@@ -79,15 +79,16 @@ export default function TransactionItem({ walletId }) {
                   let msg = (
                     <>
                       <div>
-                        <span className="fw-bold">Transaktion: </span>{' '}
+                        <span className="fw-bold">Transaction: </span>{' '}
                         <a
                           href={`https://explorer.cardano-testnet.iohkdev.io/en/transaction?id=${txInfo.txHash}`}
+                          target="_blank"
                         >
                           {txInfo.txHash}
                         </a>
                       </div>
                       <div>
-                        <span className="fw-bold">Transaktion Fee: </span>
+                        <span className="fw-bold">Transaction Fee: </span>
                         {convertToAda(txInfo.fee)} Ada
                       </div>
                     </>

@@ -37,9 +37,12 @@ export default function NFT() {
     const httpsAddress = ipfsAddress.replace('ipfs://', 'https://ipfs.io/ipfs/')
 
     const res = await fetch(httpsAddress)
-    const json = await res.json()
-    console.log(json)
-    setTechSpecs(json)
+    console.log(res)
+    if (res.status == 200) {
+      const json = await res.json()
+      // console.log(json)
+      setTechSpecs(json)
+    }
   }
 
   useEffect(() => {
@@ -99,47 +102,61 @@ export default function NFT() {
             </Container>
             {techSpecs && (
               <Container>
-                <div className="text-center fw-bold mt-4 mb-2">
+                <div className="text-center text-uppercase fw-bold mt-4 mb-2">
                   Technical specifications
                 </div>
                 {/* brand */}
                 <Row className="text-start">
+                  <Col className="col-2" />
                   <Col className="fw-bold col-2">D.1</Col>
                   <Col className="fw-bold">Brand</Col>
                   <Col>{techSpecs.brand}</Col>
                 </Row>
                 {/* version */}
                 <Row className="text-start">
+                  <Col className="col-2" />
                   <Col className="fw-bold col-2">D.2</Col>
                   <Col className="fw-bold">Type/Variant/Version</Col>
                   <Col>{techSpecs.version}</Col>
                 </Row>
                 {/* trade_name */}
                 <Row className="text-start">
+                  <Col className="col-2" />
                   <Col className="fw-bold col-2">D.3</Col>
                   <Col className="fw-bold">Trade name</Col>
                   <Col>{techSpecs.trade_name}</Col>
                 </Row>
                 {/* max_mass */}
                 <Row className="text-start">
+                  <Col className="col-2" />
                   <Col className="fw-bold col-2">F.1</Col>
                   <Col className="fw-bold">maximum mass in kg</Col>
                   <Col>{techSpecs.max_mass}</Col>
                 </Row>
                 {/* empty_mass */}
                 <Row className="text-start">
+                  <Col className="col-2" />
                   <Col className="fw-bold col-2">G</Col>
                   <Col className="fw-bold">Empty mass</Col>
                   <Col>{techSpecs.empty_mass}</Col>
                 </Row>
                 {/* vehicle_class */}
                 <Row className="text-start">
+                  <Col className="col-2" />
                   <Col className="fw-bold col-2">J</Col>
                   <Col className="fw-bold">Vehicle class</Col>
                   <Col>{techSpecs.vehicle_class}</Col>
                 </Row>
+                {/* energy_source */}
+                <Row className="text-start">
+                  <Col className="col-2" />
+                  <Col className="fw-bold col-2">P.1</Col>
+                  <Col className="fw-bold">Energy source</Col>
+                  <Col>{techSpecs.energy_source}</Col>
+                </Row>
                 {/* color */}
                 <Row className="text-start">
+                  <Col className="col-2" />
                   <Col className="fw-bold col-2">R</Col>
                   <Col className="fw-bold">Color</Col>
                   <Col>{techSpecs.color}</Col>
@@ -147,7 +164,9 @@ export default function NFT() {
               </Container>
             )}
             <Container>
-              <div className="fw-bold mt-4 mb-2">Owner Address</div>
+              <div className="text-center text-uppercase fw-bold mt-4 mb-2">
+                Owner Address
+              </div>
               <Link href={`/wallets/${asset.owner_address}`}>
                 {asset.owner_address}
               </Link>
