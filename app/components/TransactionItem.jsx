@@ -15,9 +15,6 @@ const convertToAda = (lovelace) => {
     return 0
   }
 }
-const getOnChainData = (asset) => {
-  return asset.onchain_metadata[asset.policy_id][asset.asset_name]
-}
 
 export default function TransactionItem({ walletId }) {
   const { wallet, loading } = useWallet(walletId)
@@ -193,7 +190,7 @@ export default function TransactionItem({ walletId }) {
                       assets.map((asset, i) => {
                         return (
                           <option key={i} value={asset.asset}>
-                            {getOnChainData(asset).name}
+                            {asset.onchain_metadata.name}
                           </option>
                         )
                       })}
