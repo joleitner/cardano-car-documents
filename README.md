@@ -1,21 +1,146 @@
-# Cardano Car Documents
-This project seeks to validate an idea to digitize vehicle documents such as registration certificates and checkbooks. 
-This is to be made possible with the help of blockchain technology. 
-The documents are to be created as NFTs on the Cardano blockchain.
+# Cardano Cars
+This project was developed in the context of a bachelor thesis with the title:
 
+> **Blockchain and NFTs - Meaningful use beyond cryptocurrencies?** <br>
+> Conception and prototypical implementation of an NFT-based solution for the safekeeping of digital vehicle documents
+
+A concept was developed for the digitalisation of vehicle documents with the help of blockchain.
+This project aims to test the concept developed.
+Therefore, this prototype was developed in which the digital vehicle documents are mapped as NFTs on the Cardano blockchain.
+
+## Prerequisites
+In order to successfully experiment with the project and install it locally, a few prerequisites are necessary
+
+### Docker
+Docker is used to enable easy installation of all required components.
+If Docker is not yet installed, the official [Docker documentation](https://docs.docker.com/get-docker/) will guide you.
+
+### Pinata - IPFS Service
+The IPFS service [Pinata](https://www.pinata.cloud/) is used to store off-chain data.
+When minting the NFTs, the data is uploaded and pinned via the Pinata API.
+For this purpose, a free account is required
+([To the registration](https://app.pinata.cloud/register)). <br>
+After the registration process, you can create a new API key via your account.
+The created Pinata Api Key and the corresponding Secret Key are created as environment variables for the webapp.
+An example file has already been created under `app/.env_example`.
+The variables can be entered into it, and the ending `_example` can be removed.
+```bash
+# PINATA API KEYS
+PINATA_API_KEY="<YOUR_PINATA_API_KEY>"
+PINATA_SECRET_API_KEY="<YOUR_PINATA_SECRET_API_KEY>"
+```
+The Pinata API is now successfully configured.
+
+### Blockfrost.io - Cardano API
+To easily retrieve data from the Cardano Blockchain, the API of [Blockfrost.io](https://blockfrost.io/) is used.
+The creation of a free account is required.
+After logging in, you can create a new 'Project' via the Dashboard.
+Assign a project name and select 'Cardano testnet' as the network.
+To use the API with this project, the `PROJECT ID` has to be entered in the `.env` file.
+```bash
+# BLOCKFROST
+BLOCKFROST_PROJECT_ID="<YOUR_BLOCKFROST_PROJECT_ID>"
+```
+
+Now that all requirements have been met, the project can be successfully set up.
 
 ## Setup
-To successfully run the `cardano-node` some config files are mandatory.
-To setup the project with all config files needed simple run:
+
+### 1. Database environment variables
+To ensure that the database can be set up successfully when the project is first started, there are some additional environment variables.
+For this purpose, there is also an `.env_example` file at top level.
+The ending `_example` must be removed and, if necessary, the predefined variables can be changed.
+
+In this case, however, the `DATABASE_URL` variable for the app in `app/.env` must be adjusted accordingly so that it can establish a successful connection to the database.
+```bash
+DATABASE_URL="postgresql://<DB_USER>:<DB_PASSWORD>@db:5432/<DB_NAME>?schema=public"
+```
+
+### 2. Cardano-node configuration
+In order for the `cardano-node` to establish a successful connection with the testnet, a few config files are mandatory.
+These are provided by IOHK - Input Output.
+
+To equip the project with all the required config files, simply execute this command:
 ```bash
 $ sh ./bin/fetch_config_testnet.sh
 ```
 
-To enable the simplest possible setup Docker was used for the project.
-To start the project only Docker needs to be installed. 
-When the node is started for the first time, the complete blockchain is downloaded, so you have to be patient here (approx. 10GB).
+### 3. Start project
+Since docker is used, the project can be started directly with `docker-compose`. First, all images are downloaded.
 
-Start:
 ```bash
 $ docker-compose up
 ```
+
+
+When the `cardano-node` is started for the first time, the complete blockchain has to be downloaded first, so you have to be patient here (approx. 10GB).
+It's best to just let the process run in the background and go have some coffee. ☕
+
+You can use the [Cardano testnet explorer](https://explorer.cardano-testnet.iohkdev.io/en) to compare the latest slot number and check whether you have reached the same state.
+
+### 4. Fix node.socket
+
+In order for the webapp to be able to communicate with the cardano-node, a volume got created for cross-container communication via the `node.socket`.
+The `node.socket` is created after the successful initialisation of the cardano-node.
+However, this gets created as root.
+For the webapp to be able to communicate successfully with the cardano-node, the rights must be changed:
+
+```bash
+$ sh ./bin/chown_node_socket.sh
+```
+
+It should also be noted that this command must be executed after each restart of the cardano-node. 
+
+### 5. Migrate database
+The next step is to migrate the database.
+When migrating, a seed script is executed directly so that the database is already filled with the data necessary.
+
+```bash
+$ sh ./bin/migrate_db.sh
+```
+
+A wallet gets created that is used for the crediting of other newly created wallets.
+For this, the wallet must be topped up with some test Ada (tAda).
+Copy the printed wallet address out of the console and head over to the [Cardano Testnet Faucet](https://testnets.cardano.org/en/testnets/cardano/tools/faucet/).
+The tAda needed can be requested here.
+
+### 5. Access prototype
+Congrats the project is successfully setup! 🎉 <br>
+
+The project can be accessed via any browser over [localhost:3000](http://localhost:3000).
+
+
+## Experiment with the protoype
+Since the project is now running successfully, it can be used to experiment with.
+
+### Admin
+During the migration, an admin user was already created.
+It is easy to log in as admin with the standard credentials:
+
+ ```bash
+username: admin
+password: admin
+```
+As soon as you have successfully registered, you can access the admin area for:
+1. Creating a new organisation
+2. Setting a user as the manager of an organisation
+
+For example, an organisation could be created. Then a new user could be created via the registration form, who would then be set as manager.
+
+### Minting an NFT
+As an organisation manager, it is then possible to manage the organisation's wallet and to mint new NFTs.
+This is made possible via the Manage page of the organisation.
+1. First a policy has to be created
+2. Then a new NFT can be created under the policy.
+3. There is an `nft-example-data` folder in which sample thumbnails and data are already available.
+
+After creating, it is necessary to wait briefly until the NFT has been appended with a new block to the chain (approx. 20sec).
+The [Cardano NFT Gallery](https://testnet.adatools.io/nft) can also be used to check whether the minted NFT was successfully created. 
+
+### Transactions
+For example, after creating a new NFT, it could be sent to a new user.
+1. First create a new user via signup
+2. Copy the newly created wallet address of the user and log in again as manager
+3. Now a new transaction can be created via the Manage page and the NFT can be sent to the user.
+
+

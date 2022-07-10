@@ -1,0 +1,10 @@
+{
+  "brand": "Porsche",
+  "version": "992",
+  "trade_name": "911 Targa 4S",
+  "max_mass": "1950",
+  "empty_mass": "1950",
+  "vehicle_class": "01",
+  "color": "Chalk",
+  "energy_source": "Petrol"
+}

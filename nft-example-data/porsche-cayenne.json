@@ -1,0 +1,10 @@
+{
+  "brand": "Porsche",
+  "version": "9YA",
+  "trade_name": "Cayenne",
+  "max_mass": "2830",
+  "empty_mass": "2830",
+  "vehicle_class": "M1G",
+  "color": "Bluemetallic",
+  "energy_source": "Petrol"
+}
