@@ -11,7 +11,7 @@ services:
   app:
     build: ./app
     volumes:
-      # - ./app:/usr/src/app
+      - ./app:/usr/src/app
       - node-ipc:/ipc
     ports:
       - '3000:3000'

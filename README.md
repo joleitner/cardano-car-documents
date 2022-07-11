@@ -6,10 +6,10 @@ This project was developed in the context of a bachelor thesis with the title:
 
 A concept was developed for the digitalisation of vehicle documents with the help of blockchain.
 This project aims to test the concept developed.
-Therefore, this prototype was developed in which the digital vehicle documents are mapped as NFTs on the Cardano blockchain.
+Therefore, this prototype was implemented in which the digital vehicle documents are mapped as NFTs on the Cardano blockchain.
 
 ## Prerequisites
-In order to successfully experiment with the project and install it locally, a few prerequisites are necessary
+In order to successfully experiment with the project and install it locally, a few prerequisites are necessary.
 
 ### Docker
 Docker is used to enable easy installation of all required components.
@@ -21,9 +21,10 @@ When minting the NFTs, the data is uploaded and pinned via the Pinata API.
 For this purpose, a free account is required
 ([To the registration](https://app.pinata.cloud/register)). <br>
 After the registration process, you can create a new API key via your account.
-The created Pinata Api Key and the corresponding Secret Key are created as environment variables for the webapp.
+When asked for the rights, the key can be equipped with admin rights for this purpose.
+The created `Pinata Api Key` and the corresponding `Secret Key` are created as environment variables for the webapp.
 An example file has already been created under `app/.env_example`.
-The variables can be entered into it, and the ending `_example` can be removed.
+The variables need to be entered into the file and the ending `_example` needs to be removed.
 ```bash
 # PINATA API KEYS
 PINATA_API_KEY="<YOUR_PINATA_API_KEY>"
@@ -33,7 +34,7 @@ The Pinata API is now successfully configured.
 
 ### Blockfrost.io - Cardano API
 To easily retrieve data from the Cardano Blockchain, the API of [Blockfrost.io](https://blockfrost.io/) is used.
-The creation of a free account is required.
+The creation of a free account is required and can be done [here](https://blockfrost.io/auth/signin).
 After logging in, you can create a new 'Project' via the Dashboard.
 Assign a project name and select 'Cardano testnet' as the network.
 To use the API with this project, the `PROJECT ID` has to be entered in the `.env` file.
@@ -48,7 +49,7 @@ Now that all requirements have been met, the project can be successfully set up.
 
 ### 1. Database environment variables
 To ensure that the database can be set up successfully when the project is first started, there are some additional environment variables.
-For this purpose, there is also an `.env_example` file at top level.
+For this purpose, there is also an `.env_example` file at top level of the project.
 The ending `_example` must be removed and, if necessary, the predefined variables can be changed.
 
 In this case, however, the `DATABASE_URL` variable for the app in `app/.env` must be adjusted accordingly so that it can establish a successful connection to the database.
@@ -66,20 +67,28 @@ $ sh ./bin/fetch_config_testnet.sh
 ```
 
 ### 3. Start project
-Since docker is used, the project can be started directly with `docker-compose`. First, all images are downloaded.
+Since docker is used, the project can be started directly with `docker-compose`. 
 
 ```bash
 $ docker-compose up
 ```
 
-
-When the `cardano-node` is started for the first time, the complete blockchain has to be downloaded first, so you have to be patient here (approx. 10GB).
+First, all images are downloaded.
+When the `cardano-node` is started for the first time, the complete blockchain has to be downloaded first, so you have to be patient here (approx. 12GB).
 It's best to just let the process run in the background and go have some coffee. ☕
 
 You can use the [Cardano testnet explorer](https://explorer.cardano-testnet.iohkdev.io/en) to compare the latest slot number and check whether you have reached the same state.
 
-### 4. Fix node.socket
+**Quickfix node_modules**<br>
+Since a volume was created for development that maps the folders between the local computer and the container, the node_modules are overwritten during the first setup.
+These must be reinstalled:
+```bash
+$ sh ./bin/install_node_modules.sh
+```
 
+After the cardano-node is successfully setup continue with the following steps:
+
+### 4. Fix node.socket
 In order for the webapp to be able to communicate with the cardano-node, a volume got created for cross-container communication via the `node.socket`.
 The `node.socket` is created after the successful initialisation of the cardano-node.
 However, this gets created as root.
@@ -99,10 +108,10 @@ When migrating, a seed script is executed directly so that the database is alrea
 $ sh ./bin/migrate_db.sh
 ```
 
-A wallet gets created that is used for the crediting of other newly created wallets.
+In the seed script a wallet gets created that is used for crediting wallets that will be created later on.
 For this, the wallet must be topped up with some test Ada (tAda).
 Copy the printed wallet address out of the console and head over to the [Cardano Testnet Faucet](https://testnets.cardano.org/en/testnets/cardano/tools/faucet/).
-The tAda needed can be requested here.
+Through this page the tAda needed can be requested.
 
 ### 5. Access prototype
 Congrats the project is successfully setup! 🎉 <br>
@@ -114,7 +123,7 @@ The project can be accessed via any browser over [localhost:3000](http://localho
 Since the project is now running successfully, it can be used to experiment with.
 
 ### Admin
-During the migration, an admin user was already created.
+During the migration, an admin user was created.
 It is easy to log in as admin with the standard credentials:
 
  ```bash
@@ -131,16 +140,19 @@ For example, an organisation could be created. Then a new user could be created 
 As an organisation manager, it is then possible to manage the organisation's wallet and to mint new NFTs.
 This is made possible via the Manage page of the organisation.
 1. First a policy has to be created
-2. Then a new NFT can be created under the policy.
-3. There is an `nft-example-data` folder in which sample thumbnails and data are already available.
+2. Then a new NFT can be created under the policy
+3. There is an `nft-example-data` folder in which sample thumbnails and data are already available
 
 After creating, it is necessary to wait briefly until the NFT has been appended with a new block to the chain (approx. 20sec).
 The [Cardano NFT Gallery](https://testnet.adatools.io/nft) can also be used to check whether the minted NFT was successfully created. 
 
 ### Transactions
-For example, after creating a new NFT, it could be sent to a new user.
+For example, after creating a new NFT, it could be transferred to a new user.
 1. First create a new user via signup
 2. Copy the newly created wallet address of the user and log in again as manager
-3. Now a new transaction can be created via the Manage page and the NFT can be sent to the user.
+3. Now a new transaction can be created via the Manage page and the NFT can be sent to the user
+
+<br>
+~ By creating the prototype and experimenting with it, it is easy to imagine that NFTs will be used for more than just digital art in the future.
 
 
