@@ -28,7 +28,7 @@ export default function WalletItem({ walletId }) {
 
   if (loading) {
     return (
-      <Container className="px-3 py-2 border mb-1 text-center">
+      <Container className="align-items-center px-3 py-2 border mb-1">
         <Spinner animation="border" role="status">
           <span className="visually-hidden">Loading...</span>
         </Spinner>
@@ -45,11 +45,11 @@ export default function WalletItem({ walletId }) {
           </Link>
           <Col></Col>
           <Col className="col-2 text-end fw-bold">
-            {convertToAda(wallet.amount[0].quantity)} Ada
+            {convertToAda(wallet.amount ? wallet.amount[0].quantity : 0)} Ada
           </Col>
         </Row>
       </Container>
-      {wallet.amount.length > 1 && (
+      {wallet.amount?.length > 1 && (
         <div className="fw-bold fs-6 my-4 text-center ">NFTs</div>
       )}
       <AssetList assets={wallet.amount} />

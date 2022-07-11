@@ -79,16 +79,9 @@ It's best to just let the process run in the background and go have some coffee.
 
 You can use the [Cardano testnet explorer](https://explorer.cardano-testnet.iohkdev.io/en) to compare the latest slot number and check whether you have reached the same state.
 
-**Quickfix node_modules**<br>
-Since a volume was created for development that maps the folders between the local computer and the container, the node_modules are overwritten during the first setup.
-These must be reinstalled:
-```bash
-$ sh ./bin/install_node_modules.sh
-```
-
 After the cardano-node is successfully setup continue with the following steps:
 
-### 4. Fix node.socket
+### 4. Adjust node.socket
 In order for the webapp to be able to communicate with the cardano-node, a volume got created for cross-container communication via the `node.socket`.
 The `node.socket` is created after the successful initialisation of the cardano-node.
 However, this gets created as root.
@@ -113,7 +106,7 @@ For this, the wallet must be topped up with some test Ada (tAda).
 Copy the printed wallet address out of the console and head over to the [Cardano Testnet Faucet](https://testnets.cardano.org/en/testnets/cardano/tools/faucet/).
 Through this page the tAda needed can be requested.
 
-### 5. Access prototype
+### 6. Access prototype
 Congrats the project is successfully setup! 🎉 <br>
 
 The project can be accessed via any browser over [localhost:3000](http://localhost:3000).

@@ -12,6 +12,7 @@ services:
     build: ./app
     volumes:
       - ./app:/usr/src/app
+      - /usr/src/app/node_modules
       - node-ipc:/ipc
     ports:
       - '3000:3000'
@@ -39,7 +40,6 @@ services:
       - 5555:5555
     depends_on:
       - db
-
 
 volumes:
   cardano-node-data:
