@@ -106,6 +106,10 @@ For this, the wallet must be topped up with some test Ada (tAda).
 Copy the printed wallet address out of the console and head over to the [Cardano Testnet Faucet](https://testnets.cardano.org/en/testnets/cardano/tools/faucet/).
 Through this page the tAda needed can be requested.
 
+> In case a JSON.parse error message is displayed on the website, it is best to restart the containers. 
+<!-- > After that the error is fixed. 
+> In order for the prisma client to work, the app container needs to be restarted. -->
+
 ### 6. Access prototype
 Congrats the project is successfully setup! 🎉 <br>
 
