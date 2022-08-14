@@ -1,4 +1,4 @@
-FROM inputoutput/cardano-node:latest
+FROM inputoutput/cardano-node:1.35.2
 
 COPY config/ config/
 

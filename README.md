@@ -65,6 +65,8 @@ To equip the project with all the required config files, simply execute this com
 ```bash
 $ sh ./bin/fetch_config_testnet.sh
 ```
+> In the cardano-node/Dockerfile the last stable version 1.35.2 was selected. 
+> In the future, it may be necessary to change the version manually.
 
 ### 3. Start project
 Since docker is used, the project can be started directly with `docker-compose`. 
