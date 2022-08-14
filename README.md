@@ -1,4 +1,7 @@
 # Cardano Cars
+
+**ATTENTION** runs only on amd64 architecture due to cardano-nodes dependency
+
 This project was developed in the context of a bachelor thesis with the title:
 
 > **Blockchain and NFTs - Meaningful use beyond cryptocurrencies?** <br>
@@ -63,14 +66,14 @@ These are provided by IOHK - Input Output.
 
 To equip the project with all the required config files, simply execute this command:
 ```bash
-$ sh ./bin/fetch_config_testnet.sh
+sh ./bin/fetch_config_testnet.sh
 ```
 
 ### 3. Start project
 Since docker is used, the project can be started directly with `docker-compose`. 
 
 ```bash
-$ docker-compose up
+docker-compose up
 ```
 
 First, all images are downloaded.
@@ -88,7 +91,7 @@ However, this gets created as root.
 For the webapp to be able to communicate successfully with the cardano-node, the rights must be changed:
 
 ```bash
-$ sh ./bin/chown_node_socket.sh
+sh ./bin/chown_node_socket.sh
 ```
 
 It should also be noted that this command must be executed after each restart of the cardano-node. 
@@ -98,7 +101,7 @@ The next step is to migrate the database.
 When migrating, a seed script is executed directly so that the database is already filled with the data necessary.
 
 ```bash
-$ sh ./bin/migrate_db.sh
+sh ./bin/migrate_db.sh
 ```
 
 In the seed script a wallet gets created that is used for crediting wallets that will be created later on.
