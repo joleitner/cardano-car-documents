@@ -11,9 +11,6 @@ A concept was developed for the digitalisation of vehicle documents with the hel
 This project aims to test the concept developed.
 Therefore, this prototype was implemented in which the digital vehicle documents are mapped as NFTs on the Cardano blockchain.
 
-## Demo
-If you want to demo this project, you might want to use [Nami wallet](https://chrome.google.com/webstore/detail/nami/lpfcbjknijpeeillifnkikgncikgfhdo) in the browser for the NFTs to show up in an independent wallet AND viewer.
-
 ## Prerequisites
 In order to successfully experiment with the project and install it locally, a few prerequisites are necessary.
 
@@ -151,11 +148,16 @@ This is made possible via the Manage page of the organisation.
 After creating, it is necessary to wait briefly until the NFT has been appended with a new block to the chain (approx. 20sec).
 The [Cardano NFT Gallery](https://testnet.adatools.io/nft) can also be used to check whether the minted NFT was successfully created. 
 
+## Remote Wallets
+If you want to demo this project, you might want to use [Nami wallet](https://chrome.google.com/webstore/detail/nami/lpfcbjknijpeeillifnkikgncikgfhdo) in the browser for the NFTs to show up in an independent wallet AND viewer.
+
 ### Transactions
 For example, after creating a new NFT, it could be transferred to a new user.
 1. First create a new user via signup
 2. Copy the newly created wallet address of the user and log in again as manager
 3. Now a new transaction can be created via the Manage page and the NFT can be sent to the user
+
+
 
 <br>
 ~ By creating the prototype and experimenting with it, it is easy to imagine that NFTs will be used for more than just digital art in the future.
