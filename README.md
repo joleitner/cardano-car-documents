@@ -11,6 +11,9 @@ A concept was developed for the digitalisation of vehicle documents with the hel
 This project aims to test the concept developed.
 Therefore, this prototype was implemented in which the digital vehicle documents are mapped as NFTs on the Cardano blockchain.
 
+## Demo
+If you want to demo this project, you might want to use [Nami wallet](https://chrome.google.com/webstore/detail/nami/lpfcbjknijpeeillifnkikgncikgfhdo) in the browser for the NFTs to show up in an independent wallet AND viewer.
+
 ## Prerequisites
 In order to successfully experiment with the project and install it locally, a few prerequisites are necessary.
 
