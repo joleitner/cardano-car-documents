@@ -154,6 +154,9 @@ This is made possible via the Manage page of the organisation.
 After creating, it is necessary to wait briefly until the NFT has been appended with a new block to the chain (approx. 20sec).
 The [Cardano NFT Gallery](https://testnet.adatools.io/nft) can also be used to check whether the minted NFT was successfully created. 
 
+### Remote Wallets
+If you want to demo this project, you might want to use [Nami wallet](https://chrome.google.com/webstore/detail/nami/lpfcbjknijpeeillifnkikgncikgfhdo) in the browser for the NFTs to show up in an independent wallet AND viewer.
+
 ### Transactions
 For example, after creating a new NFT, it could be transferred to a new user.
 1. First create a new user via signup
@@ -168,6 +171,7 @@ If you want to work on the webapp, you can simply change the contents in the `./
 
 ### Enforcing conatiner rebuild
 If you change the different containers themselves, you might want to run `docker-compose up --build` to enforce a rebuild.
+
 
 <br>
 ~ By creating the prototype and experimenting with it, it is easy to imagine that NFTs will be used for more than just digital art in the future.
