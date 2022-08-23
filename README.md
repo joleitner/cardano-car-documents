@@ -78,6 +78,12 @@ Since docker is used, the project can be started directly with `docker-compose`.
 docker-compose up
 ```
 
+or
+```bash
+docker-compose up --build
+```
+to enforce a rebuild of the container (e.g. you changed some inner workings)
+
 First, all images are downloaded.
 When the `cardano-node` is started for the first time, the complete blockchain has to be downloaded first, so you have to be patient here (approx. 12GB).
 It's best to just let the process run in the background and go have some coffee. ☕
@@ -148,7 +154,7 @@ This is made possible via the Manage page of the organisation.
 After creating, it is necessary to wait briefly until the NFT has been appended with a new block to the chain (approx. 20sec).
 The [Cardano NFT Gallery](https://testnet.adatools.io/nft) can also be used to check whether the minted NFT was successfully created. 
 
-## Remote Wallets
+### Remote Wallets
 If you want to demo this project, you might want to use [Nami wallet](https://chrome.google.com/webstore/detail/nami/lpfcbjknijpeeillifnkikgncikgfhdo) in the browser for the NFTs to show up in an independent wallet AND viewer.
 
 ### Transactions
@@ -157,6 +163,14 @@ For example, after creating a new NFT, it could be transferred to a new user.
 2. Copy the newly created wallet address of the user and log in again as manager
 3. Now a new transaction can be created via the Manage page and the NFT can be sent to the user
 
+
+## Development
+
+### The Webapp
+If you want to work on the webapp, you can simply change the contents in the `./app/` folder and wait for the webapp to refresh. The container uses a mapped volume, so the content of `./app/` is considered live for the app container. Because by deafult the container is running a next.js app in development mode, it will recognize changes and refresh automatically.
+
+### Enforcing conatiner rebuild
+If you change the different containers themselves, you might want to run `docker-compose up --build` to enforce a rebuild.
 
 
 <br>
