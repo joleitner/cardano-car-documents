@@ -15,4 +15,8 @@ RUN npm install
 
 COPY . .
 
+# fix the primsa cleint issue
+RUN npx prisma generate
+
+# the default command to excute on container launch
 CMD [ "npm", "run", "dev" ]
